@@ -1,0 +1,14 @@
+import vlc
+import time
+
+")
+player = vlc.MediaPlayer("http://live.radiovoz.es/mp3/stream_coruna.mp3")
+
+player.play()
+print(titulo)
+
+
+time.sleep(50)
+
+
+
