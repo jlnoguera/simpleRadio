@@ -1,48 +1,32 @@
-import radio
-import time
+import radio,arduinoComunication
+
 '''
     Recoge las acciones realizadas en Arduino para pedirselas a la Radio
+    Se realiza un bucle continuo leyendo del puerto serie de arduino
 
     Author  : Jose Luis Noguera Dols
-    Date    : 28/08/18
+    Date    : 07/10/18
 '''
-class InterfaceRadioArduino:
+class InterfaceRadioArduino():
 
-    def __init__(self):
+    def __init__(self,puerto):
         self.nomApp = "InterfaceRadioArduino->"
         self.radio = radio.Radio()
+        self.arduino = arduinoComunication.ArduinoComunication(self,puerto)
+        #Cambiando esta variable a true, se deja de comunicar con arduino
+        self.stop = false
+        #Recoge la opcion enviada por arduino, por defecto es cero (vacio)
+        self.opcion = 0
+        print("InterfaceRadioArduino")
 
-    def __del__(self):
-        self.radio = None
-
-    def Play(self,orden):
-        try:
-            self.radio.StationPlay(orden)
-        except Exception,e:
-            raise Exception(self.nomApp+"Play : "+e)
+    def LeerArduino(self):
+        while self.stop==false:
+            self.opcion = int(arduino.Read())
+            if self.opcion > 0:
+                RadioOpcion(self)
 
     def Stop(self):
-        try:
-            self.radio.Stop()
-        except Exception,e:
-            raise Exception(self.nomApp+"Stop : "+e)
-    
-    def Pause(self):
-        try:
-            self.radio.Pause()
-        except Exception,e:
-            raise Exception(self.nomApp+e)
+        self.stop = true
 
-    def Next(self):
-        try:
-            self.radio.NextStation()
-        except Exception,e:
-            raise Exception(self.nomApp+e)
-
-    def Prev(self):
-        try:
-            self.radio.PrevStation()
-        except Exception,e:
-            raise Exception(self.nomApp+e)
-
-
+    def RadioOpcion(self):
+        self.Radio.StationPlay(self,self.opcion)

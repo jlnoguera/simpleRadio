@@ -8,10 +8,10 @@
 
 import vlc
 
-class VlcApi:
+class VlcApi(object):
 
 	def __init__(self,url):
-		self.player = vlc.MediaPlayer(url) 
+		self.player = vlc.MediaPlayer(url)
 
 	def Play(self):
 		self.player.play()
